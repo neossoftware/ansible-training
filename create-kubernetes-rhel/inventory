@@ -1,0 +1,5 @@
+[masters]
+master ansible_host=ec2-52-54-173-74.compute-1.amazonaws.com ansible_user=ansible
+
+[workers]
+worker1 ansible_host=ec2-54-145-175-63.compute-1.amazonaws.com ansible_user=ansible
