@@ -23,6 +23,7 @@ sudo passwd ansible
 sudo visudo
 ansible ALL=(ALL) NOPASSWD: ALL
 
+
 ```
 
 3. Add SSH public key from ansible server to 2 VMs
@@ -39,3 +40,26 @@ ansible-playbook -i inventory k8-kube-dependencies-rhel-allnodes.yml
 Initialize Control plane
 ansible-playbook -i inventory k8-kube-dependencies-rhel-master.yml
 
+Once it is completed the scripts login on master node 
+
+and execute 
+
+   mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+  then validate cluster using
+
+  kubectl get nodes 
+
+  ansible@ip-172-31-45-169 ~]$ kubectl get nodes
+NAME                            STATUS   ROLES           AGE    VERSION
+ip-172-31-45-169.ec2.internal   Ready    control-plane   4m8s   v1.28.3
+
+On master execute this command to get the token to add each worker node in the cluster
+ sudo kubeadm token create --print-join-command
+ p.e 
+
+Login on each node an execute the output of previous command
+
+sudo kubeadm join 172.31.45.169:6443 --token ufwkdj.zepxe1hiokhozlxu --discovery-token-ca-cert-hash sha256:951b6eb0253170fb099815cb0e2c732702631056c525d279d76961569d513228
